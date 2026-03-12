@@ -4,21 +4,39 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 function App() {
   const [showGame, setShowGame] = useState(false);
 
-  const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
-    loaderUrl: "Build/CollegeNevigationBuild.loader.js",       // ← change MyBuild to your actual file name
+  const { unityProvider, isLoaded, loadingProgression, requestFullscreen } = useUnityContext({
+    loaderUrl: "Build/CollegeNevigationBuild.loader.js", 
     dataUrl: "Build/CollegeNevigationBuild.data",
     frameworkUrl: "Build/CollegeNevigationBuild.framework.js",
     codeUrl: "Build/CollegeNevigationBuild.wasm",
   });
 
+  // Full screen function
+  const handleFullscreen = () => {
+    if (isLoaded) {
+      requestFullscreen(true);
+    }
+  };
+
   return (
     <div style={styles.container}>
+      
+      {/* --- HEADER --- */}
+      <header style={styles.header}>
+        <div style={styles.logo}>PRMITR Amravati</div>
+      </header>
 
-      {/* HERO SECTION */}
+      {/* --- HERO SECTION --- */}
       {!showGame && (
         <div style={styles.hero}>
-          <h1 style={styles.title}>PRMITR College</h1>
-          <p style={styles.subtitle}>Explore our campus in 3D</p>
+          <h1 style={styles.title}>Welcome to PRMITR</h1>
+          <p style={styles.subtitle}>Prof. Ram Meghe Institute of Technology & Research, Badnera</p>
+          
+          <div style={styles.detailsBox}>
+            <p>Explore our state-of-the-art campus in a fully interactive 3D environment. 
+               Navigate through departments, labs, and student hubs right from your browser.</p>
+          </div>
+
           <button
             style={styles.demoButton}
             onClick={() => setShowGame(true)}
@@ -28,14 +46,14 @@ function App() {
         </div>
       )}
 
-      {/* UNITY GAME SECTION */}
+      {/* --- UNITY GAME SECTION --- */}
       {showGame && (
         <div style={styles.gameContainer}>
 
           {/* Loading Bar */}
           {!isLoaded && (
             <div style={styles.loadingContainer}>
-              <p style={styles.loadingText}>Loading Campus...</p>
+              <p style={styles.loadingText}>Loading Campus Architecture...</p>
               <div style={styles.loadingBarBg}>
                 <div style={{
                   ...styles.loadingBarFill,
@@ -58,17 +76,25 @@ function App() {
             }}
           />
 
-          {/* Back Button */}
+          {/* Game Controls (Back & FullScreen) */}
           {isLoaded && (
-            <button
-              style={styles.backButton}
-              onClick={() => setShowGame(false)}
-            >
-              ← Back
-            </button>
+            <div style={styles.controlsOverlay}>
+              <button style={styles.backButton} onClick={() => setShowGame(false)}>
+                ← Back
+              </button>
+              <button style={styles.fullScreenButton} onClick={handleFullscreen}>
+                ⛶ Full Screen
+              </button>
+            </div>
           )}
-
         </div>
+      )}
+
+      {/* --- FOOTER --- */}
+      {!showGame && (
+        <footer style={styles.footer}>
+          <p>© 2026 PRMITR Amravati | Developed for Virtual Campus Tour</p>
+        </footer>
       )}
 
     </div>
@@ -81,36 +107,76 @@ const styles = {
     padding: 0,
     backgroundColor: "#0a0a0a",
     minHeight: "100vh",
-    fontFamily: "Arial, sans-serif",
+    fontFamily: "'Segoe UI', Roboto, sans-serif",
+    display: "flex",
+    flexDirection: "column",
+  },
+  header: {
+    padding: "20px 40px",
+    backgroundColor: "rgba(0,0,0,0.8)",
+    borderBottom: "1px solid #333",
+    position: "fixed",
+    width: "100%",
+    top: 0,
+    zIndex: 10,
+  },
+  logo: {
+    fontSize: "1.5rem",
+    fontWeight: "bold",
+    color: "#2563eb",
+    letterSpacing: "1px",
   },
   hero: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh",
+    flex: 1,
     color: "white",
+    textAlign: "center",
+    padding: "0 20px",
+    marginTop: "80px", // Header space
   },
   title: {
-    fontSize: "3rem",
-    fontWeight: "bold",
+    fontSize: "3.5rem",
+    fontWeight: "800",
     marginBottom: "10px",
-    color: "#ffffff",
+    background: "linear-gradient(to right, #fff, #2563eb)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
   },
   subtitle: {
-    fontSize: "1.2rem",
+    fontSize: "1.3rem",
     color: "#aaaaaa",
+    marginBottom: "20px",
+  },
+  detailsBox: {
+    maxWidth: "600px",
+    backgroundColor: "rgba(255,255,255,0.05)",
+    padding: "20px",
+    borderRadius: "12px",
     marginBottom: "40px",
+    lineHeight: "1.6",
+    color: "#cccccc",
   },
   demoButton: {
-    padding: "16px 48px",
+    padding: "18px 56px",
     fontSize: "1.2rem",
     backgroundColor: "#2563eb",
     color: "white",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "50px",
     cursor: "pointer",
     fontWeight: "bold",
+    transition: "transform 0.2s, background 0.2s",
+    boxShadow: "0 10px 20px rgba(37, 99, 235, 0.3)",
+  },
+  footer: {
+    padding: "20px",
+    textAlign: "center",
+    color: "#666",
+    fontSize: "0.9rem",
+    borderTop: "1px solid #1a1a1a",
   },
   gameContainer: {
     position: "relative",
@@ -125,38 +191,43 @@ const styles = {
     height: "100vh",
     color: "white",
   },
-  loadingText: {
-    fontSize: "1.5rem",
-    marginBottom: "20px",
-  },
   loadingBarBg: {
     width: "300px",
-    height: "12px",
-    backgroundColor: "#333",
-    borderRadius: "6px",
+    height: "8px",
+    backgroundColor: "#222",
+    borderRadius: "10px",
     overflow: "hidden",
   },
   loadingBarFill: {
     height: "100%",
     backgroundColor: "#2563eb",
-    borderRadius: "6px",
-    transition: "width 0.3s ease",
+    transition: "width 0.4s ease-out",
   },
-  loadingPercent: {
-    marginTop: "10px",
-    color: "#aaaaaa",
-  },
-  backButton: {
+  controlsOverlay: {
     position: "absolute",
     top: "20px",
     left: "20px",
+    display: "flex",
+    flexDirection:"row",
+    gap: "10px",
+    zIndex: 100,
+  },
+  backButton: {
     padding: "10px 20px",
-    backgroundColor: "rgba(0,0,0,0.6)",
+    backgroundColor: "rgba(0,0,0,0.7)",
     color: "white",
-    border: "1px solid white",
+    border: "1px solid #444",
     borderRadius: "6px",
     cursor: "pointer",
-    zIndex: 100,
+  },
+  fullScreenButton: {
+    padding: "10px 20px",
+    backgroundColor: "#2563eb",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontWeight: "bold",
   },
 };
 
