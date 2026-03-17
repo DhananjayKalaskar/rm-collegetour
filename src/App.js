@@ -4,11 +4,17 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 function App() {
   const [showGame, setShowGame] = useState(false);
 
+  // const { unityProvider, isLoaded, loadingProgression, requestFullscreen } = useUnityContext({
+  //   loaderUrl: "Build/CollegeNevigationBuild.loader.js", 
+  //   dataUrl: "Build/CollegeNevigationBuild.data",
+  //   frameworkUrl: "Build/CollegeNevigationBuild.framework.js",
+  //   codeUrl: "Build/CollegeNevigationBuild.wasm",
+  // });
   const { unityProvider, isLoaded, loadingProgression, requestFullscreen } = useUnityContext({
-    loaderUrl: "Build/CollegeNevigationBuild.loader.js", 
-    dataUrl: "Build/CollegeNevigationBuild.data",
-    frameworkUrl: "Build/CollegeNevigationBuild.framework.js",
-    codeUrl: "Build/CollegeNevigationBuild.wasm",
+    loaderUrl: "https://minio-gc40k4sswks88oogwwwgwsk0.72.62.226.98.sslip.io/college-navigation/CollegeNevigationBuild.loader.js", 
+    dataUrl: "https://minio-gc40k4sswks88oogwwwgwsk0.72.62.226.98.sslip.io/college-navigation/CollegeNevigationBuild.data",
+    frameworkUrl: "https://minio-gc40k4sswks88oogwwwgwsk0.72.62.226.98.sslip.io/college-navigation/CollegeNevigationBuild.framework.js",
+    codeUrl: "https://minio-gc40k4sswks88oogwwwgwsk0.72.62.226.98.sslip.io/college-navigation/CollegeNevigationBuild.wasm",
   });
 
   // Full screen function
